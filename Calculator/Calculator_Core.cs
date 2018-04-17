@@ -2,28 +2,45 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Text;
 
 public class Calculator_Core
 {
-    string _commandurl = "http://test.ethorstat.com/test.ashx";
-
-    public Calculator_Core()
-    {
-    }
+    private const string _commandurl = "http://test.ethorstat.com/test.ashx";
+    Token_stream ts;
+    public Calculator_Core() {}
 
     public float Calculate()
     {
         var input = InputFromUrl(_commandurl);
+        ts = new Token_stream(input);
         return 0.00F;
     }
 
-    public float Calculate(string input)
+    public void Calculate(string input)
     {
         // TODO
-        return 0.00F;
+        try
+        {
+            ts = new Token_stream(input);
+            while (ts._input.Length != 0)
+            {
+                var t = ts.Get();
+                while (t._kind == 'p') t = ts.Get();     // get through all prints
+                if (t._kind == 'q') return;    // quit
+                ts.Putback(t);
+                Console.WriteLine($"result is: {Expression()}");
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message, e);
+            Clean_up_mess();
+            return;
+        }
     }
 
     /// <summary>
@@ -57,97 +74,103 @@ public class Calculator_Core
         }
         return input_string;
     }
-}
 
-public class Token
-{
-    char Kind { get; set; }
-    string Name { get; set; }
-    double Value { get; set; }
-
-    public Token(char ch) { }
-    public Token(char ch, double val) { }
-    public Token(char ch, string n) { }
-}
-
-public interface IToken_stream
-{
-    Token Get();
-    void Putback(Token t);
-    void Ignore(char c);
-}
-
-public class Token_stream:IToken_stream
-{
-    private bool _full;
-    private Token _buffer;
-    private string _input;
-
-    public Token_stream()
+    /// <summary>
+    /// Handle '+' or '-'
+    /// </summary>
+    /// <returns></returns>
+    private double Expression()
     {
-        _full = false;
-        _buffer = null;
-        _input = null;
-    }
+        var left = Term(); // read and evaluate a term.
+        var t = ts.Get();
 
-    public Token_stream(string input)
-    {
-        _full = false;
-        _buffer = null;
-        _input = input;
-    }
-
-    public Token Get()
-    {
-        if (_full)
+        while (true)
         {
-            _full = false;
-            return _buffer;
-        }
-
-        if (_input.Equals(null))
-        {
-            throw new Exception("Unable to process empty input.");
-        }
-
-        Evaluate_Input(_input);
-    }
-
-    private Token Evaluate_Input(string input)
-    {
-        for (int i=0; i<input.Length; i++)
-        {
-            var ch = input[i];
-            if (ch >= 0 && ch <= 9)
+            switch (t._kind)
             {
+                // TODO: Are the additional Gets necessary, or will we end up skipping characters.
+                case '+':
+                    left += Term();
+                    Console.WriteLine($"Left = {left}");
+                    t = ts.Get();
+                    break;
 
-                var whole_number = new List<string>();
-                // TODO: Handle numeric input
+                case '-':
+                    left -= Term();
+                    t = ts.Get();
+                    break;
+
+                    default:
+                        ts.Putback(t);  // The token isn't a + or a -, put it back for future evaluation.
+                        return left;
             }
-            else
+        }
+    }
+
+    /// <summary>
+    /// Handle '*', '/', and '%'
+    /// </summary>
+    /// <returns></returns>
+    private double Term()
+    {
+        var left = Primary();
+        var t = ts.Get();
+
+        while (true)
+        {
+            switch (t._kind)
             {
-                // TODO: Handle text input
-                switch (ch)
+                case '*':
+                    left *= Primary();
+                    t = ts.Get();
+                    break;
+
+                case '/':
+                    {
+                        var d = Primary();
+                        if (d.Equals(0)) throw new InvalidOperationException();
+                        left /= d;
+                        t = ts.Get();
+                        break;
+                    }
+
+                default:
+                    ts.Putback(t);
+                    return left;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Handles numbers and brackets
+    /// </summary>
+    /// <returns></returns>
+    private double Primary()
+    {
+        var t = ts.Get();
+
+        switch (t._kind)
+        {
+            case '(':
                 {
-                    case 'q':
-
-                    default: break;
+                    var d = Expression();
+                    t = ts.Get();
+                    if (t._kind != ')') throw new FormatException();
+                    return d;
                 }
-            }
-            Token t = new Token(ch);
+            case 'n':
+                return t._value;
+            case '-':
+                return -Primary();
+            case '+':
+                return Primary();
+            default:
+                throw new Exception("No primary found");
         }
     }
 
-    public void Putback(Token t)
+    private void Clean_up_mess()
     {
-        if (_full)
-            throw new Exception("Attempted to put item back into a full buffer.");
-        _buffer = t;
-        _full = true;
-    }
-
-    public void Ignore(char ch)
-    {
-        // TODO:
+        ts.Ignore('p');
     }
 }
