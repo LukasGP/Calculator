@@ -23,7 +23,7 @@ namespace Calculator
             Console.WriteLine($"Received input: {input}");
             var calc = new Calculator_Core();
             var result = calc.Calculate(input);
-            WriteCalculationDetails(input, result.ToString());
+            WriteCalculationDetails(result.Item1, result.Item2.ToString());
         }
 
         private void WriteCalculationDetails(string input, string result)
