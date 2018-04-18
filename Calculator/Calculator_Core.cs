@@ -13,13 +13,30 @@ public class Calculator_Core
     Token_stream ts;
     public Calculator_Core() {}
 
+    /// <summary>
+    /// Get the input for the stored command url and run calculate to determine the result.
+    /// </summary>
+    /// <returns>
+    /// Tuple<string,double>
+    ///    -- Item1 is the input text
+    ///    -- Item2 is the calculated result
+    /// </returns>
+    /// </returns>
     public Tuple<string,double> CalculateFromUrl()
     {
         var input = InputFromUrl(_commandurl);
         return Calculate(input);
-
     }
 
+    /// <summary>
+    /// From the given input calculate the result..
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns>
+    /// Tuple<string,double>
+    ///    -- Item1 is the input text
+    ///    -- Item2 is the calculated result
+    /// </returns>
     public Tuple<string,double> Calculate(string input)
     {
         try
