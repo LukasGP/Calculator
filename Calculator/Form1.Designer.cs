@@ -53,7 +53,7 @@
             this.challenge_input.Name = "challenge_input";
             this.challenge_input.Size = new System.Drawing.Size(490, 20);
             this.challenge_input.TabIndex = 2;
-            this.challenge_input.Text = "1+2";
+            this.challenge_input.Text = "1+2*(6/2)";
             // 
             // challenge_start
             // 
