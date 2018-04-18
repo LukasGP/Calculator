@@ -14,7 +14,7 @@ namespace Calculator
         {
             var calc = new Calculator_Core();
             var result = calc.CalculateFromUrl();
-            WriteCalculationDetails(result.Keys.ToString(), result.Values.ToString());
+            WriteCalculationDetails(result.Item1, result.Item2.ToString());
         }
 
         private void challenge_start_Click(object sender, EventArgs e)

@@ -13,19 +13,17 @@ public class Calculator_Core
     Token_stream ts;
     public Calculator_Core() {}
 
-    public Dictionary<string,double> CalculateFromUrl()
+    public Tuple<string,double> CalculateFromUrl()
     {
         var input = InputFromUrl(_commandurl);
         return Calculate(input);
 
     }
 
-    // TODO: CHANGE TO TUPLE
-    public Dictionary<string,double> Calculate(string input)
+    public Tuple<string,double> Calculate(string input)
     {
         try
         {
-            var calculationDetails = new Dictionary<string, double>();
             ts = new Token_stream(input);
             while (ts._input.Length != 0)
             {
@@ -35,14 +33,12 @@ public class Calculator_Core
                 ts.Putback(t);
                 var result = Expression();
                 Console.WriteLine($"result is: {result}");
-                calculationDetails.Add(input, result);
-                return calculationDetails;
+                return new Tuple<string,double>(input,result);
             }
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message, e);
-            Clean_up_mess();
         }
         return null;
     }
@@ -171,10 +167,5 @@ public class Calculator_Core
             default:
                 throw new Exception("No primary found");
         }
-    }
-
-    private void Clean_up_mess()
-    {
-        ts.Ignore('p');
     }
 }
