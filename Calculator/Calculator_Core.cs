@@ -13,34 +13,38 @@ public class Calculator_Core
     Token_stream ts;
     public Calculator_Core() {}
 
-    public float Calculate()
+    public Dictionary<string,double> CalculateFromUrl()
     {
         var input = InputFromUrl(_commandurl);
-        ts = new Token_stream(input);
-        return 0.00F;
+        return Calculate(input);
+
     }
 
-    public void Calculate(string input)
+    // TODO: CHANGE TO TUPLE
+    public Dictionary<string,double> Calculate(string input)
     {
-        // TODO
         try
         {
+            var calculationDetails = new Dictionary<string, double>();
             ts = new Token_stream(input);
             while (ts._input.Length != 0)
             {
                 var t = ts.Get();
                 while (t._kind == 'p') t = ts.Get();     // get through all prints
-                if (t._kind == 'q') return;    // quit
+                if (t._kind == 'q') return null;    // quit
                 ts.Putback(t);
-                Console.WriteLine($"result is: {Expression()}");
+                var result = Expression();
+                Console.WriteLine($"result is: {result}");
+                calculationDetails.Add(input, result);
+                return calculationDetails;
             }
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message, e);
             Clean_up_mess();
-            return;
         }
+        return null;
     }
 
     /// <summary>
