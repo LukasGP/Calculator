@@ -10,6 +10,5 @@ namespace Calculator
     {
         Token Get();
         void Putback(Token t);
-        void Ignore(char c);
     }
 }

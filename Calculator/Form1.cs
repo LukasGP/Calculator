@@ -5,6 +5,8 @@ namespace Calculator
 {
     public partial class Calculator : Form
     {
+        private const string _commandurl = "http://test.ethorstat.com/test.ashx";
+
         public Calculator()
         {
             InitializeComponent();
@@ -13,7 +15,7 @@ namespace Calculator
         private void Start_Click(object sender, EventArgs e)
         {
             var calc = new Calculator_Core();
-            var result = calc.CalculateFromUrl();
+            var result = calc.CalculateFromUrl(_commandurl);
             WriteCalculationDetails(result.Item1, result.Item2.ToString());
         }
 

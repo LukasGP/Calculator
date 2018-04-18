@@ -9,7 +9,7 @@ using System.Text;
 
 public class Calculator_Core
 {
-    private const string _commandurl = "http://test.ethorstat.com/test.ashx";
+    
     Token_stream ts;
     public Calculator_Core() {}
 
@@ -22,14 +22,14 @@ public class Calculator_Core
     ///    -- Item2 is the calculated result
     /// </returns>
     /// </returns>
-    public Tuple<string,double> CalculateFromUrl()
+    public Tuple<string,double> CalculateFromUrl(string commandurl)
     {
-        var input = GetInputFromUrl(_commandurl);
+        var input = GetInputFromUrl(commandurl);
         return Calculate(input);
     }
 
     /// <summary>
-    /// From the given input calculate the result..
+    /// From the given input calculate the result.
     /// </summary>
     /// <param name="input"></param>
     /// <returns>
@@ -81,8 +81,8 @@ public class Calculator_Core
                 {
                     var js = new JsonSerializer();
                     var input = js.Deserialize<Url_Input>(jr);
-                    Console.WriteLine($"{input.Parm1},{input.Parm2},{input.Op}");
                     input_string = new StringBuilder().Append(input.Parm1).Append(input.Op).Append(input.Parm2).ToString();
+                    Console.WriteLine($"Retrieved input: {input_string}");
                 }
             }
         }
@@ -94,7 +94,7 @@ public class Calculator_Core
     }
 
     /// <summary>
-    /// Handle '+' or '-'
+    /// Check for a Term then handle '+' or '-'
     /// </summary>
     /// <returns></returns>
     private double Expression()
@@ -125,7 +125,7 @@ public class Calculator_Core
     }
 
     /// <summary>
-    /// Handle '*', '/', and '%'
+    /// Check for a Primary then handle '*', '/'
     /// </summary>
     /// <returns></returns>
     private double Term()
