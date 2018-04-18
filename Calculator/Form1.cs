@@ -13,7 +13,8 @@ namespace Calculator
         private void Start_Click(object sender, EventArgs e)
         {
             var calc = new Calculator_Core();
-            calc.Calculate();
+            var result = calc.CalculateFromUrl();
+            WriteCalculationDetails(result.Keys.ToString(), result.Values.ToString());
         }
 
         private void challenge_start_Click(object sender, EventArgs e)
@@ -21,7 +22,15 @@ namespace Calculator
             var input = challenge_input.Text;
             Console.WriteLine($"Received input: {input}");
             var calc = new Calculator_Core();
-            calc.Calculate(input);
+            var result = calc.Calculate(input);
+            WriteCalculationDetails(input, result.ToString());
+        }
+
+        private void WriteCalculationDetails(string input, string result)
+        {
+            var lvi = new ListViewItem(input);
+            lvi.SubItems.Add(result);
+            calculatorDisplay.Items.Add(lvi);
         }
     }
 }
