@@ -109,6 +109,10 @@ namespace Calculator
             return new Token(';');
         }
 
+        /// <summary>
+        /// Store a token in buffer for future evaluation.
+        /// </summary>
+        /// <param name="t"></param>
         public void Putback(Token t)
         {
             if (_full)
@@ -116,28 +120,6 @@ namespace Calculator
             Console.WriteLine($"Storing Token in buffer:{t._kind}:{t._value}");
             _buffer = t;
             _full = true;
-        }
-
-        public void Ignore(char ignore_ch)
-        {
-            if (_full && ignore_ch == _buffer._kind)
-            {
-                _full = false;
-                return;
-            }
-
-            _full = false;
-
-            // now search input:
-            char ch;
-            int i = 0;
-            while (i < _input.Length)
-            {
-                ch = _input[i];
-                if (ch == ignore_ch)
-                    return;
-                i++;
-            }
         }
     }
 }

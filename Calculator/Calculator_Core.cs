@@ -24,7 +24,7 @@ public class Calculator_Core
     /// </returns>
     public Tuple<string,double> CalculateFromUrl()
     {
-        var input = InputFromUrl(_commandurl);
+        var input = GetInputFromUrl(_commandurl);
         return Calculate(input);
     }
 
@@ -61,13 +61,14 @@ public class Calculator_Core
     }
 
     /// <summary>
-    /// Get our input from the designated url and turn into a format consumable by our calculator.
+    /// Get input from the designated url and turn into a format consumable by our calculator.
     /// </summary>
     /// <param name="url"></param>
     /// <returns></returns>
-    private string InputFromUrl(string url)
+    private string GetInputFromUrl(string url)
     {
         // Fetch JSON string
+        // TODO: Make this more flexible on the number of parameters
         string input_string = "";
         try
         {
@@ -98,23 +99,22 @@ public class Calculator_Core
     /// <returns></returns>
     private double Expression()
     {
-        var left = Term(); // read and evaluate a term.
+        var left = Term(); // read and evaluate a term. On first call we'd expect it to return a numeric or a bracket.
         var t = ts.Get();
 
         while (true)
         {
             switch (t._kind)
             {
-                // TODO: Are the additional Gets necessary, or will we end up skipping characters.
                 case '+':
                     left += Term();
                     Console.WriteLine($"Left = {left}");
-                    t = ts.Get();
+                    t = ts.Get();   // Get the next character for evaluation in the next loop
                     break;
 
                 case '-':
                     left -= Term();
-                    t = ts.Get();
+                    t = ts.Get(); // Get the next character for evaluation in the next loop
                     break;
 
                     default:
