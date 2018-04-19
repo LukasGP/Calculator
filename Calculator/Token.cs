@@ -10,7 +10,6 @@ namespace Calculator
     {
         public char _kind { get; set; }
         public double _value { get; set; }
-        public bool _isEmpty { get; set; }
 
         /// <summary>
         /// Create a Token that represents iteslef.
