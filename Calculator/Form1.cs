@@ -21,11 +21,19 @@ namespace Calculator
 
         private void challenge_start_Click(object sender, EventArgs e)
         {
-            var input = challenge_input.Text;
-            Console.WriteLine($"Received input: {input}");
-            var calc = new Calculator_Core();
-            var result = calc.Calculate(input);
-            WriteCalculationDetails(result.Item1, result.Item2.ToString());
+            try
+            {
+                var input = challenge_input.Text;
+                Console.WriteLine($"Received input: {input}");
+                var calc = new Calculator_Core();
+                var result = calc.Calculate(input);
+                WriteCalculationDetails(result.Item1, result.Item2.ToString());
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message, e);
+                WriteCalculationDetails("Unable to run calculation, please double check that your input is correct", null);
+            }
         }
 
         private void WriteCalculationDetails(string input, string result)
