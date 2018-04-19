@@ -55,57 +55,58 @@ namespace Calculator
 
         private Token Evaluate_Input()
         {
-            for (int i = 0; i < _input.Length; i++)
+            var ch = _input[0];
+            if (_input.Length.Equals(0))
             {
-                var ch = _input[i];
-                if ((ch >= '0' && ch <= '9') || ch == '.')
-                {
-                    // We've detected a number, now we need to gather the entire value.
-                    var strBuilder = new StringBuilder();
-                    strBuilder.Append(ch.ToString());
-
-                    int tmp_index = i + 1;
-                    if (_input.Length > 1)
-                    {
-                        while (_input[tmp_index] >= 0 && _input[tmp_index] <= 9)
-                        {
-                            strBuilder.Append(_input[tmp_index]);
-                            tmp_index++;
-                        }
-                    }
-                    
-                    // Capture the number
-                    var whole_number = float.Parse(strBuilder.ToString(), CultureInfo.InvariantCulture.NumberFormat);
-
-                    // Remove all characters which were associated with that number so we don't evaluate them again.
-                    int number_of_characters = tmp_index - i;
-                    Console.WriteLine($"Found number {whole_number}, Removing {number_of_characters} from input");
-
-                    _input = _input.Remove(i, tmp_index - i);
-                    return new Token('n', whole_number);
-                }
-
-                // Let these characters represent themselves
-                switch (ch)
-                {
-                    case 'q':
-                    case 'p':
-                    case '(':
-                    case ')':
-                    case '+':
-                    case '-':
-                    case '*':
-                    case '/':
-                    case '%':
-                    case '=':
-                        _input = _input.Remove(i, i + 1);
-                        return new Token(ch);
-                    default:
-                        throw new Exception("Bad Input");
-                }
+                Console.WriteLine("No input to evaluate");
+                return new Token(';');
             }
-            Console.WriteLine("No Input Provided");
-            return new Token(';');
+            
+            if ((ch >= '0' && ch <= '9') || ch == '.')
+            {
+                // We've detected a number, now we need to gather the entire value.
+                var strBuilder = new StringBuilder();
+                strBuilder.Append(ch.ToString());
+
+                int tmp_index = 1;
+                if (_input.Length > 1)
+                {
+                    while (_input[tmp_index] >= 0 && _input[tmp_index] <= 9)
+                    {
+                        strBuilder.Append(_input[tmp_index]);
+                        tmp_index++;
+                    }
+                }
+                    
+                // Capture the number
+                var whole_number = float.Parse(strBuilder.ToString(), CultureInfo.InvariantCulture.NumberFormat);
+
+                // Remove all characters which were associated with that number so we don't evaluate them again.
+                int number_of_characters = tmp_index;
+                Console.WriteLine($"Found number {whole_number}, Removing {number_of_characters} from input");
+
+                _input = _input.Remove(0, tmp_index);
+                return new Token('n', whole_number);
+            }
+
+            // Let these characters represent themselves
+            switch (ch)
+            {
+                case 'q':
+                case 'p':
+                case '(':
+                case ')':
+                case '+':
+                case '-':
+                case '*':
+                case '/':
+                case '%':
+                case '=':
+                    _input = _input.Remove(0, 1);
+                    return new Token(ch);
+                default:
+                    throw new Exception("Bad Input");
+            }
         }
 
         /// <summary>
