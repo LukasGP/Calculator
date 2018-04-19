@@ -58,7 +58,6 @@ namespace Calculator
             for (int i = 0; i < _input.Length; i++)
             {
                 var ch = _input[i];
-                // TODO: Handle numeric input
                 if ((ch >= '0' && ch <= '9') || ch == '.')
                 {
                     // We've detected a number, now we need to gather the entire value.

@@ -63,7 +63,7 @@
             this.challenge_start.TabIndex = 3;
             this.challenge_start.Text = "Do Your Worst";
             this.challenge_start.UseVisualStyleBackColor = true;
-            this.challenge_start.Click += new System.EventHandler(this.challenge_start_Click);
+            this.challenge_start.Click += new System.EventHandler(this.Challenge_Start_Click);
             // 
             // calculatorDisplay
             // 

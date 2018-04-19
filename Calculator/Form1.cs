@@ -14,12 +14,19 @@ namespace Calculator
 
         private void Start_Click(object sender, EventArgs e)
         {
-            var calc = new Calculator_Core();
-            var result = calc.CalculateFromUrl(_commandurl);
-            WriteCalculationDetails(result.Item1, result.Item2.ToString());
+            try
+            {
+                var calc = new Calculator_Core();
+                var result = calc.CalculateFromUrl(_commandurl);
+                WriteCalculationDetails(result.Item1, result.Item2.ToString());
+            }
+            catch(Exception exception)
+            {
+                WriteCalculationDetails($"Unable to run calculation from url:{exception.Message}", "");
+            }
         }
 
-        private void challenge_start_Click(object sender, EventArgs e)
+        private void Challenge_Start_Click(object sender, EventArgs e)
         {
             try
             {
@@ -29,10 +36,10 @@ namespace Calculator
                 var result = calc.Calculate(input);
                 WriteCalculationDetails(result.Item1, result.Item2.ToString());
             }
-            catch(Exception e)
+            catch(Exception exception)
             {
-                Console.WriteLine(e.Message, e);
-                WriteCalculationDetails("Unable to run calculation, please double check that your input is correct", null);
+                Console.WriteLine(exception.Message, exception);
+                WriteCalculationDetails("Unable to run calculation, please double check that your input is correct", "");
             }
         }
 

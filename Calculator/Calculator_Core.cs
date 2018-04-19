@@ -39,23 +39,16 @@ public class Calculator_Core
     /// </returns>
     public Tuple<string,double> Calculate(string input)
     {
-        try
+        ts = new Token_stream(input);
+        while (ts._input.Length != 0)
         {
-            ts = new Token_stream(input);
-            while (ts._input.Length != 0)
-            {
-                var t = ts.Get();
-                while (t._kind == 'p') t = ts.Get();     // get through all prints
-                if (t._kind == 'q') return null;    // quit
-                ts.Putback(t);
-                var result = Expression();
-                Console.WriteLine($"result is: {result}");
-                return new Tuple<string,double>(input,result);
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message, e);
+            var t = ts.Get();
+            while (t._kind == 'p') t = ts.Get();     // get through all prints
+            if (t._kind == 'q') return null;    // quit
+            ts.Putback(t);
+            var result = Expression();
+            Console.WriteLine($"result is: {result}");
+            return new Tuple<string,double>(input,result);
         }
         return null;
     }
@@ -89,6 +82,7 @@ public class Calculator_Core
         catch (Exception exception)
         {
             Console.WriteLine($"Failed to parse input from provided url: {exception.Message}, {exception.ToString()}");
+            throw new Exception(exception.Message, exception);
         }
         return input_string;
     }
