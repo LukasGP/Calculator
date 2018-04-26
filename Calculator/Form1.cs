@@ -33,7 +33,7 @@ namespace Calculator
                 var input = challenge_input.Text;
                 Console.WriteLine($"Received input: {input}");
                 var calc = new Calculator_Core();
-                var result = calc.Calculate(input);
+                var result = calc.CalculateFromString(input);
                 WriteCalculationDetails(result.Item1, result.Item2.ToString());
             }
             catch(Exception exception)
