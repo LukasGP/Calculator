@@ -8,7 +8,7 @@ using Calculator;
 
 namespace Calculator
 {
-    class Token_stream:IToken_stream
+    public class Token_stream:IToken_stream
     {
         private bool _full;
         private Token _buffer;

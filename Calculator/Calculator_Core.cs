@@ -41,7 +41,7 @@ namespace Calculator
         /// </returns>
         public Tuple<string, double> CalculateFromString(string input)
         {
-            ts = new Token_stream(input);
+            SetInput(input);
             while (ts._input.Length != 0)
             {
                 var t = ts.Get();
@@ -53,6 +53,15 @@ namespace Calculator
                 return new Tuple<string, double>(input, result);
             }
             return null;
+        }
+
+        /// <summary>
+        /// Create a token stream based off of the input string.
+        /// </summary>
+        /// <param name="input"></param>
+        public void SetInput(string input)
+        {
+            ts = new Token_stream(input);
         }
 
         /// <summary>
@@ -92,30 +101,37 @@ namespace Calculator
         /// Check for a Term then handle '+' or '-'
         /// </summary>
         /// <returns></returns>
-        private double Expression()
+        public double Expression()
         {
-            var left = Term(); // read and evaluate a term. On first call we'd expect it to return a numeric or a bracket.
-            var t = ts.Get();
-
-            while (true)
+            try
             {
-                switch (t._kind)
+                var left = Term(); // read and evaluate a term. On first call we'd expect it to return a numeric or a bracket.
+                var t = ts.Get();
+
+                while (true)
                 {
-                    case '+':
-                        left += Term();
-                        Console.WriteLine($"Left = {left}");
-                        t = ts.Get();   // Get the next character for evaluation in the next loop
-                        break;
+                    switch (t._kind)
+                    {
+                        case '+':
+                            left += Term();
+                            Console.WriteLine($"Left = {left}");
+                            t = ts.Get();   // Get the next character for evaluation in the next loop
+                            break;
 
-                    case '-':
-                        left -= Term();
-                        t = ts.Get(); // Get the next character for evaluation in the next loop
-                        break;
+                        case '-':
+                            left -= Term();
+                            t = ts.Get(); // Get the next character for evaluation in the next loop
+                            break;
 
-                    default:
-                        ts.Putback(t);  // The token isn't a + or a -, put it back for future evaluation.
-                        return left;
+                        default:
+                            ts.Putback(t);  // The token isn't a + or a -, put it back for future evaluation.
+                            return left;
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Unable to calculate a result:{e.Message}");
             }
         }
 
@@ -123,7 +139,7 @@ namespace Calculator
         /// Check for a Primary then handle '*', '/'
         /// </summary>
         /// <returns></returns>
-        private double Term()
+        public double Term()
         {
             var left = Primary();
             var t = ts.Get();
@@ -157,7 +173,7 @@ namespace Calculator
         /// Handles numbers and brackets
         /// </summary>
         /// <returns></returns>
-        private double Primary()
+        public double Primary()
         {
             var t = ts.Get();
 
@@ -165,6 +181,7 @@ namespace Calculator
             {
                 case '(':
                     {
+                        // Compute the contents of the bracket before continuing.
                         var d = Expression();
                         t = ts.Get();
                         if (t._kind != ')') throw new FormatException();
