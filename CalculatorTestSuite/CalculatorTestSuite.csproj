@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DecimalsSingleOperations.cs" />
+    <Compile Include="Bedmas.cs" />
+    <Compile Include="Primary.cs" />
     <Compile Include="WholeNumberSingleOperations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
