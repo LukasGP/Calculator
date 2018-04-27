@@ -24,19 +24,17 @@ namespace CalculatorTestSuite
         }
 
         [TestMethod]
+        [ExpectedException(typeof(FormatException))]
         public void BracketWithNoClosingPrimary()
         {
             // SETUP
             var input = "(";
-            double expectedResult = 25;
+            var expectedResult = new FormatException();
             var calc = new Calculator_Core();
             calc.SetInput(input);
 
             // EXECUTE
             calc.Primary();
-
-            // ASSERT
-            //Assert.AreEqual(expectedResult, numericPrimary);
         }
     }
 }
