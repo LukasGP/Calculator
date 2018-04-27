@@ -71,7 +71,7 @@ namespace Calculator
                 int tmp_index = 1;
                 if (_input.Length > 1)
                 {
-                    while (_input[tmp_index] >= '0' && _input[tmp_index] <= '9')
+                    while (tmp_index < _input.Length && ((_input[tmp_index] >= '0' && _input[tmp_index] <= '9') || _input[tmp_index] == '.'))
                     {
                         strBuilder.Append(_input[tmp_index]);
                         tmp_index++;
