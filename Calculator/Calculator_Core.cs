@@ -132,6 +132,7 @@ namespace Calculator
             catch (Exception e)
             {
                 Console.WriteLine($"Unable to calculate a result:{e.Message}");
+                return double.NaN;
             }
         }
 
