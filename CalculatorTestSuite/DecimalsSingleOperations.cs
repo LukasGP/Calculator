@@ -27,7 +27,7 @@ namespace CalculatorTestSuite
         {
             // SETUP
             var calc = new Calculator_Core();
-            var input = "-8+3";
+            var input = "-8.5+3.5";
             Tuple<string, double> expectedResult = new Tuple<string, double>(input, -5);
 
             // EXECUTE
@@ -42,8 +42,8 @@ namespace CalculatorTestSuite
         {
             // SETUP
             var calc = new Calculator_Core();
-            var input = "-8+-3";
-            Tuple<string, double> expectedResult = new Tuple<string, double>(input, -11);
+            var input = "-8.5+-3.5";
+            Tuple<string, double> expectedResult = new Tuple<string, double>(input, -12);
 
             // EXECUTE
             var result = calc.CalculateFromString(input);
@@ -57,7 +57,7 @@ namespace CalculatorTestSuite
         {
             // SETUP
             var calc = new Calculator_Core();
-            var input = "8-3";
+            var input = "8.5-3.5";
             Tuple<string, double> expectedResult = new Tuple<string, double>(input, 5);
 
             // EXECUTE
@@ -72,7 +72,7 @@ namespace CalculatorTestSuite
         {
             // SETUP
             var calc = new Calculator_Core();
-            var input = "5-8";
+            var input = "5.5-8.5";
             Tuple<string, double> expectedResult = new Tuple<string, double>(input, -3);
 
             // EXECUTE
@@ -89,8 +89,8 @@ namespace CalculatorTestSuite
         {
             // SETUP
             var calc = new Calculator_Core();
-            var input = "5*8";
-            Tuple<string, double> expectedResult = new Tuple<string, double>(input, 40);
+            var input = "0.25*4";
+            Tuple<string, double> expectedResult = new Tuple<string, double>(input, 1);
 
             // EXECUTE
             var result = calc.CalculateFromString(input);
@@ -104,8 +104,8 @@ namespace CalculatorTestSuite
         {
             // SETUP
             var calc = new Calculator_Core();
-            var input = "-5*-8";
-            Tuple<string, double> expectedResult = new Tuple<string, double>(input, 40);
+            var input = "-0.25*-4";
+            Tuple<string, double> expectedResult = new Tuple<string, double>(input, 1);
 
             // EXECUTE
             var result = calc.CalculateFromString(input);
@@ -119,8 +119,8 @@ namespace CalculatorTestSuite
         {
             // SETUP
             var calc = new Calculator_Core();
-            var input = "5*-8";
-            Tuple<string, double> expectedResult = new Tuple<string, double>(input, -40);
+            var input = "0.25*-4";
+            Tuple<string, double> expectedResult = new Tuple<string, double>(input, -1);
 
             // EXECUTE
             var result = calc.CalculateFromString(input);
@@ -134,8 +134,8 @@ namespace CalculatorTestSuite
         {
             // SETUP
             var calc = new Calculator_Core();
-            var input = "40/8";
-            Tuple<string, double> expectedResult = new Tuple<string, double>(input, 5);
+            var input = "0.5/0.25";
+            Tuple<string, double> expectedResult = new Tuple<string, double>(input, 2);
 
             // EXECUTE
             var result = calc.CalculateFromString(input);
@@ -149,8 +149,8 @@ namespace CalculatorTestSuite
         {
             // SETUP
             var calc = new Calculator_Core();
-            var input = "-40/-8";
-            Tuple<string, double> expectedResult = new Tuple<string, double>(input, 5);
+            var input = "-0.5/-0.25";
+            Tuple<string, double> expectedResult = new Tuple<string, double>(input, 2);
 
             // EXECUTE
             var result = calc.CalculateFromString(input);
@@ -164,8 +164,8 @@ namespace CalculatorTestSuite
         {
             // SETUP
             var calc = new Calculator_Core();
-            var input = "40/-8";
-            Tuple<string, double> expectedResult = new Tuple<string, double>(input, -5);
+            var input = "0.5/-0.25";
+            Tuple<string, double> expectedResult = new Tuple<string, double>(input, -2);
 
             // EXECUTE
             var result = calc.CalculateFromString(input);
