@@ -173,5 +173,20 @@ namespace CalculatorTestSuite
             // ASSERT
             Assert.AreEqual(expectedResult, result);
         }
+
+        [TestMethod]
+        public void DecimalNoLeadingNumber()
+        {
+            // SETUP
+            var calc = new Calculator_Core();
+            var input = ".5/-.25";
+            Tuple<string, double> expectedResult = new Tuple<string, double>(input, -2);
+
+            // EXECUTE
+            var result = calc.CalculateFromString(input);
+
+            // ASSERT
+            Assert.AreEqual(expectedResult, result);
+        }
     }
 }

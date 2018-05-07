@@ -28,13 +28,13 @@ namespace CalculatorTestSuite
         public void BracketWithNoClosingPrimary()
         {
             // SETUP
-            var input = "(";
+            var input = "4/(3+8";
             var expectedResult = new FormatException();
             var calc = new Calculator_Core();
             calc.SetInput(input);
 
             // EXECUTE
-            calc.Primary();
+            calc.Expression();
         }
     }
 }
