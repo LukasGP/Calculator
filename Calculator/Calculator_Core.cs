@@ -41,16 +41,25 @@ namespace Calculator
         /// </returns>
         public Tuple<string, double> CalculateFromString(string input)
         {
-            SetInput(input);
-            while (ts._input.Length != 0)
+            try
             {
-                var t = ts.Get();
-                while (t._kind == 'p') t = ts.Get();     // get through all prints
-                if (t._kind == 'q') return null;    // quit
-                ts.Putback(t);
-                var result = Expression();
-                Console.WriteLine($"result is: {result}");
-                return new Tuple<string, double>(input, result);
+                SetInput(input);
+                if (ts._input.Length != 0)
+                {
+                    var t = ts.Get();
+                    while (t._kind == 'p') t = ts.Get();     // get through all prints
+                    if (t._kind == 'q') return null;    // quit
+                    ts.Putback(t);
+                    var result = Expression();
+                    if (result == double.MaxValue || result == double.MinValue)
+                        throw new OutOfMemoryException($"The result of this calculation ran outside of our supported range: {double.MinValue} => {double.MaxValue}.");
+                    Console.WriteLine($"result is: {result}");
+                    return new Tuple<string, double>(input, result);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message, e);
             }
             return null;
         }
@@ -103,36 +112,28 @@ namespace Calculator
         /// <returns></returns>
         public double Expression()
         {
-            try
-            {
-                var left = Term(); // read and evaluate a term. On first call we'd expect it to return a numeric or a bracket.
-                var t = ts.Get();
+            var left = Term(); // read and evaluate a term. On first call we'd expect it to return a numeric, '.' or a bracket.
+            var t = ts.Get();
 
-                while (true)
+            while (true)
+            {
+                switch (t._kind)
                 {
-                    switch (t._kind)
-                    {
-                        case '+':
-                            left += Term();
-                            Console.WriteLine($"Left = {left}");
-                            t = ts.Get();   // Get the next character for evaluation in the next loop
-                            break;
+                    case '+':
+                        left += Term();
+                        Console.WriteLine($"Left = {left}");
+                        t = ts.Get();   // Get the next character for evaluation in the next loop
+                        break;
 
-                        case '-':
-                            left -= Term();
-                            t = ts.Get(); // Get the next character for evaluation in the next loop
-                            break;
+                    case '-':
+                        left -= Term();
+                        t = ts.Get(); // Get the next character for evaluation in the next loop
+                        break;
 
-                        default:
-                            ts.Putback(t);  // The token isn't a + or a -, put it back for future evaluation.
-                            return left;
-                    }
+                    default:
+                        ts.Putback(t);  // The token isn't a + or a -, put it back for future evaluation.
+                        return left;
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Unable to calculate a result:{e.Message}");
-                return double.NaN;
             }
         }
 

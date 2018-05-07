@@ -39,7 +39,7 @@ namespace Calculator
             catch(Exception exception)
             {
                 Console.WriteLine(exception.Message, exception);
-                WriteCalculationDetails("Unable to run calculation, please double check that your input is correct", "");
+                WriteCalculationDetails(challenge_input.Text, exception.Message);
             }
         }
 
